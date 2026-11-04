@@ -1,0 +1,14 @@
+{
+  "name": "caren-torbey-gestoria",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Landing responsive de Proc. Caren Torbey, gestoría de trámites en Uruguay.",
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/serve.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "preview": "node scripts/serve.mjs --directory dist"
+  },
+  "engines": { "node": ">=20" }
+}

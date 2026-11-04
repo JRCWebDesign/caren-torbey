@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import { readFile, access } from 'node:fs/promises';
+const html = await readFile('public/index.html', 'utf8');
+const js = await readFile('public/app.js', 'utf8');
+const css = await readFile('public/styles.css', 'utf8');
+const ids = [...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]);
+assert.equal(new Set(ids).size, ids.length, 'IDs duplicados');
+for (const [, hash] of html.matchAll(/href="#([^"]+)"/g)) assert(ids.includes(hash), `Ancla inexistente: ${hash}`);
+for (const [, asset] of html.matchAll(/(?:src|href)="(?!https?:|#)([^"]+)"/g)) await access(`public/${asset}`);
+for (const [, icon] of html.matchAll(/data-icon="([^"]+)"/g)) await access(`public/assets/icons/${icon}.svg`);
+for (const [, asset] of css.matchAll(/url\(['"]?([^'"\)]+)['"]?\)/g)) await access(`public/${asset}`);
+for (const [, link] of html.matchAll(/href="(https:\/\/wa.me\/[^\"]+)"/g)) assert.equal(new URL(link).pathname, '/59891682154');
+assert(html.includes('name="consulta"') && html.includes('name="nombre"'));
+assert(js.includes('encodeURIComponent(message.join'));
+assert(css.includes('prefers-reduced-motion'));
+assert(!html.includes('091 682 154"'), 'No precargar el teléfono de Caren como dato del visitante');
+console.log('OK: recursos locales, fuentes, iconos, anclas, IDs, contacto, movimiento reducido y estructura del formulario.');
